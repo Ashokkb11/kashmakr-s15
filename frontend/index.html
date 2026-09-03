@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>KashMakr — S40 B2B Lead Scoring Engine</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: sans-serif; background: #080c16; color: #f1f5f9; }
+.card { background: #0f172a; border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 16px; }
+.btn-primary { background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%); color: #0b0f19; font-weight: 700; }
+input, select { background: #060911; border: 1px solid rgba(192, 132, 252, 0.3); color: #f8fafc; border-radius: 8px; padding: 10px; width: 100%; }
+</style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+<div class="max-w-5xl mx-auto space-y-8">
+  <div class="flex justify-between items-center border-b border-purple-900/40 pb-6">
+    <div>
+      <span class="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs font-bold rounded-full border border-purple-500/30">Revenue Intelligence</span>
+      <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-300 to-teal-300 mt-2">B2B Lead Scoring & Win-Probability Engine</h1>
+      <p class="text-gray-400 text-sm mt-1">Firmographic scoring, intent categorization, and automated sales routing.</p>
+    </div>
+    <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg text-xs font-mono font-bold">● Cloud Live</span>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="card p-6 space-y-4">
+      <h2 class="text-lg font-bold text-purple-200">🎯 Prospect Qualification</h2>
+      <div><label class="text-xs text-gray-400">Company Name</label><input id="co" type="text" value="Corner Bakery LLC"/></div>
+      <div><label class="text-xs text-gray-400">Company Size</label><select id="sz"><option value="1-20" selected>1-20 (Seed / Early)</option><option value="50-250">50-250 (Mid-Market)</option><option value="500+">500+ (Enterprise)</option></select></div>
+      <div><label class="text-xs text-gray-400">Intent Signal</label><select id="intent"><option value="High">High (Demo Requested)</option><option value="Medium" selected>Medium (Content Download)</option><option value="Low">Low (Website Visit)</option></select></div>
+      <button onclick="scoreLead()" class="w-full btn-primary py-3 rounded-xl">⚡ Score Lead Opportunity</button>
+    </div>
+    <div class="card p-6 space-y-4">
+      <h2 class="text-lg font-bold text-purple-200">📊 Qualification Verdict</h2>
+      <pre id="score-res" class="p-4 bg-black/60 rounded border border-gray-800 text-xs font-mono text-purple-300">Click Score Lead to evaluate...</pre>
+    </div>
+  </div>
+</div>
+<script>
+async function scoreLead() {
+  const co = document.getElementById('co').value;
+  const sz = document.getElementById('sz').value;
+  const intent = document.getElementById('intent').value;
+  const res = await fetch('/api/score-lead', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ company_name: co, company_size: sz, intent_level: intent }) });
+  const data = await res.json();
+  document.getElementById('score-res').textContent = JSON.stringify(data, null, 2);
+}
+</script></body></html>
